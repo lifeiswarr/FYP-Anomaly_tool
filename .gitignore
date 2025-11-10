@@ -1,0 +1,19 @@
+Python cache files
+
+pycache/
+*.pyc
+*.pyo
+
+Data files
+
+*.csv
+
+Trained model files
+
+*.joblib
+*.pth
+
+Environment files
+
+.venv/
+venv/

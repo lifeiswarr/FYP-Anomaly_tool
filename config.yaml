@@ -1,0 +1,27 @@
+database:
+  name: project_adapt.db
+  folder: storage
+  pragmas:
+    journal_mode: WAL
+    synchronous: NORMAL
+    temp_store: MEMORY
+    foreign_keys: ON
+    mmap_size: 268435456
+
+pipeline:
+  mode: live
+  data_source: live_capture.csv
+  batch_size: 500
+  anomaly_threshold: 0.8
+  output_folder: output_logs
+  stages:
+    ingestion: true
+    preprocessing: true
+    detection: true
+    evaluation: false
+    reporting: false
+
+logging:
+  level: INFO
+  file: logs/pipeline.log
+  console: true

@@ -1,0 +1,115 @@
+2025-11-10 11:10:14 [INFO] === Pipeline Started ===
+2025-11-10 11:10:14 [INFO] Mode: live
+2025-11-10 11:10:14 [INFO] Database: storage/project_adapt.db
+2025-11-10 11:10:14 [INFO] Data Source: live_capture.csv
+2025-11-10 11:10:14 [INFO] Starting data ingestion...
+2025-11-10 11:10:14 [INFO] Data ingestion completed.
+2025-11-10 11:10:14 [INFO] Starting anomaly detection...
+2025-11-10 11:10:14 [INFO] Threshold=0.8, Batch Size=500
+2025-11-10 11:10:14 [INFO] Anomaly detection completed.
+2025-11-10 11:10:14 [INFO] Pipeline completed successfully.
+2025-11-10 11:10:14 [INFO] === Pipeline Ended ===
+
+2025-11-10 11:30:19,613 [INFO] === Pipeline Started ===
+2025-11-10 11:30:19,677 [INFO] === Pipeline Ended ===
+2025-11-10 11:32:10,803 [INFO] === Pipeline Started ===
+2025-11-10 11:32:10,804 [INFO] [Ingestion] Starting data ingestion...
+2025-11-10 11:32:10,804 [INFO] [Ingestion] Completed successfully.
+2025-11-10 11:32:10,804 [INFO] [Preprocessing] Cleaning and transforming data...
+2025-11-10 11:32:10,804 [INFO] [Preprocessing] Completed successfully.
+2025-11-10 11:32:10,804 [INFO] [Detection] Running anomaly detection...
+2025-11-10 11:32:10,804 [INFO] [Detection] Completed successfully.
+2025-11-10 11:32:10,804 [INFO] Pipeline completed successfully.
+2025-11-10 11:32:10,804 [INFO] === Pipeline Ended ===
+2025-11-10 11:56:34,024 [INFO] === Pipeline Started ===
+2025-11-10 11:56:34,025 [INFO] [Ingestion] Starting data ingestion...
+2025-11-10 11:56:34,026 [INFO] [Ingestion] Completed successfully.
+2025-11-10 11:56:34,026 [INFO] [Preprocessing] Cleaning and transforming data...
+2025-11-10 11:56:34,026 [INFO] [Preprocessing] Completed successfully.
+2025-11-10 11:56:34,026 [INFO] [Detection] Running anomaly detection...
+2025-11-10 11:56:34,028 [INFO] [Detection] Completed successfully.
+2025-11-10 11:56:34,031 [INFO] Pipeline completed successfully.
+2025-11-10 11:56:34,031 [INFO] === Pipeline Ended ===
+2025-11-10 11:59:07,600 [INFO] === Pipeline Started ===
+2025-11-10 11:59:07,660 [INFO] ✅ Database initialized at 'storage\project_adapt.db'
+2025-11-10 11:59:07,660 [INFO] [Ingestion] Starting data ingestion...
+2025-11-10 11:59:07,696 [INFO] [Ingestion] Loaded 448 rows from live_capture.csv
+2025-11-10 11:59:07,696 [INFO] [Ingestion] Completed successfully.
+2025-11-10 11:59:07,697 [INFO] [Preprocessing] Cleaning and transforming data...
+2025-11-10 11:59:07,898 [INFO] [Preprocessing] Completed successfully.
+2025-11-10 11:59:07,899 [INFO] [Detection] Running anomaly detection...
+2025-11-10 11:59:08,100 [INFO] [Detection] Completed successfully.
+2025-11-10 11:59:08,101 [INFO] Pipeline completed successfully.
+2025-11-10 11:59:08,101 [INFO] === Pipeline Ended ===
+2025-11-10 12:07:55,336 [INFO] === Pipeline Started ===
+2025-11-10 12:07:55,337 [INFO] Mode: live
+2025-11-10 12:07:55,337 [INFO] Database: storage\project_adapt.db
+2025-11-10 12:07:55,337 [INFO] Data Source: live_capture.csv
+2025-11-10 12:07:55,337 [INFO] [Ingestion] Starting data ingestion...
+2025-11-10 12:07:55,372 [INFO] [Ingestion] Loaded 448 rows from live_capture.csv
+2025-11-10 12:07:55,432 [INFO] [Ingestion] Completed successfully.
+2025-11-10 12:07:55,432 [INFO] [Preprocessing] Cleaning and transforming data...
+2025-11-10 12:18:23,119 [INFO] === Pipeline Started ===
+2025-11-10 12:18:23,120 [INFO] Mode: live
+2025-11-10 12:18:23,120 [INFO] Database: storage\project_adapt.db
+2025-11-10 12:18:23,120 [INFO] Data Source: live_capture.csv
+2025-11-10 12:18:23,142 [INFO] ✅ Database initialized at 'storage\project_adapt.db'
+2025-11-10 12:18:23,142 [INFO] [Ingestion] Starting data ingestion...
+2025-11-10 20:12:32,774 [INFO] === Pipeline Started ===
+2025-11-10 20:12:32,781 [INFO] Mode: live
+2025-11-10 20:12:32,781 [INFO] Database: storage\project_adapt.db
+2025-11-10 20:12:32,781 [INFO] Data Source: live_capture.csv
+2025-11-10 20:12:32,937 [INFO] ✅ Database initialized at 'storage\project_adapt.db'
+2025-11-10 20:12:32,937 [INFO] [Ingestion] Starting data ingestion...
+2025-11-10 20:18:54,512 [INFO] === Pipeline Started ===
+2025-11-10 20:18:54,513 [INFO] Mode: live
+2025-11-10 20:18:54,513 [INFO] Database: storage\project_adapt.db
+2025-11-10 20:18:54,513 [INFO] Data Source: live_capture.csv
+2025-11-10 20:18:54,515 [INFO] ✅ Database initialized at 'storage\project_adapt.db'
+2025-11-10 20:18:54,516 [INFO] [Ingestion] Starting data ingestion...
+2025-11-10 20:18:54,524 [INFO] [Ingestion] Detected columns: ['duration', 'protocol_type', 'service', 'flag', 'src_bytes', 'dst_bytes', 'count', 'srv_count', 'serror_rate', 'same_srv_rate', 'src_port', 'dst_port']
+2025-11-10 20:21:55,412 [INFO] === Pipeline Started ===
+2025-11-10 20:21:55,412 [INFO] Mode: live
+2025-11-10 20:21:55,413 [INFO] Database: storage\project_adapt.db
+2025-11-10 20:21:55,413 [INFO] Data Source: live_capture.csv
+2025-11-10 20:21:55,454 [INFO] ✅ Database initialized at 'storage\project_adapt.db'
+2025-11-10 20:21:55,455 [INFO] [Ingestion] Starting data ingestion...
+2025-11-10 20:21:55,477 [INFO] [Ingestion] Detected columns: ['duration', 'protocol_type', 'service', 'flag', 'src_bytes', 'dst_bytes', 'count', 'srv_count', 'serror_rate', 'same_srv_rate', 'src_port', 'dst_port']
+2025-11-10 20:21:55,497 [INFO] [Ingestion] Loaded 448 rows from live_capture.csv
+2025-11-10 20:21:55,497 [INFO] [Ingestion] Completed successfully.
+2025-11-10 20:21:55,497 [INFO] [Preprocessing] Cleaning and transforming data...
+2025-11-10 20:21:55,497 [INFO] [Preprocessing] Completed successfully.
+2025-11-10 20:21:55,497 [INFO] [Detection] Running anomaly detection...
+2025-11-10 20:29:00,812 [INFO] === Pipeline Started ===
+2025-11-10 20:29:00,814 [INFO] Mode: live
+2025-11-10 20:29:00,814 [INFO] Database: storage\project_adapt.db
+2025-11-10 20:29:00,814 [INFO] Data Source: live_capture.csv
+2025-11-10 20:29:00,834 [INFO] ✅ Database initialized at 'storage\project_adapt.db'
+2025-11-10 20:29:00,834 [INFO] [Ingestion] Starting data ingestion...
+2025-11-10 20:29:00,856 [INFO] [Ingestion] Detected columns: ['duration', 'protocol_type', 'service', 'flag', 'src_bytes', 'dst_bytes', 'count', 'srv_count', 'serror_rate', 'same_srv_rate', 'src_port', 'dst_port']
+2025-11-10 20:29:00,875 [INFO] [Ingestion] Loaded 448 rows from live_capture.csv
+2025-11-10 20:29:00,875 [INFO] [Ingestion] Completed successfully.
+2025-11-10 20:29:00,875 [INFO] [Preprocessing] Cleaning and transforming data...
+2025-11-10 20:29:00,875 [INFO] [Preprocessing] Completed successfully.
+2025-11-10 20:31:02,218 [INFO] === Pipeline Started ===
+2025-11-10 20:31:02,218 [INFO] Mode: live
+2025-11-10 20:31:02,220 [INFO] Database: storage\project_adapt.db
+2025-11-10 20:31:02,220 [INFO] Data Source: live_capture.csv
+2025-11-10 20:31:02,238 [INFO] ✅ Database initialized at 'storage\project_adapt.db'
+2025-11-10 20:31:02,238 [INFO] [Ingestion] Starting data ingestion...
+2025-11-10 20:31:02,260 [INFO] [Ingestion] Detected columns: ['duration', 'protocol_type', 'service', 'flag', 'src_bytes', 'dst_bytes', 'count', 'srv_count', 'serror_rate', 'same_srv_rate', 'src_port', 'dst_port']
+2025-11-10 20:31:02,277 [INFO] [Ingestion] Loaded 448 rows from live_capture.csv
+2025-11-10 20:31:02,277 [INFO] [Ingestion] Completed successfully.
+2025-11-10 20:31:02,277 [INFO] [Preprocessing] Cleaning and transforming data...
+2025-11-10 20:31:02,277 [INFO] [Preprocessing] Completed successfully.
+2025-11-10 20:38:05,726 [INFO] === Pipeline Started ===
+2025-11-10 20:38:05,727 [INFO] Mode: live
+2025-11-10 20:38:05,727 [INFO] Database: storage\project_adapt.db
+2025-11-10 20:38:05,727 [INFO] Data Source: live_capture.csv
+2025-11-10 20:38:05,730 [INFO] ✅ Database initialized at 'storage\project_adapt.db'
+2025-11-10 20:38:05,731 [INFO] [Ingestion] Starting data ingestion...
+2025-11-10 20:38:05,753 [INFO] [Ingestion] Detected columns: ['duration', 'protocol_type', 'service', 'flag', 'src_bytes', 'dst_bytes', 'count', 'srv_count', 'serror_rate', 'same_srv_rate', 'src_port', 'dst_port']
+2025-11-10 20:38:05,771 [INFO] [Ingestion] Loaded 448 rows from live_capture.csv
+2025-11-10 20:38:05,771 [INFO] [Ingestion] Completed successfully.
+2025-11-10 20:38:05,771 [INFO] [Preprocessing] Cleaning and transforming data...
+2025-11-10 20:38:05,771 [INFO] [Preprocessing] Completed successfully.

@@ -1,0 +1,14 @@
+[WARNING] Could not load config.yaml: Config file not found: config.yaml
+[INFO] Connecting to database at: C:\Users\OSL\Anomaly_tool\storage\project_adapt.db
+[INFO] Found tables: ['detectors', 'anomalies', 'sqlite_schema', 'raw_data', 'sqlite_sequence', 'labels', 'sqlite_temp_schema']
+[INFO] 
+Checking foreign key constraints:
+[INFO]   labels: raw_data(raw_id → id)
+[INFO]   anomalies: raw_data(raw_id → id)
+[INFO] 
+Verifying indexes:
+[INFO]   raw_data: ['idx_raw_sensor', 'idx_raw_ts']
+[INFO]   anomalies: ['idx_anomalies_score', 'idx_anomalies_raw']
+[INFO] 
+✅ [DB-READY] Schema validated successfully.
+[INFO] Logs saved at: C:\Users\OSL\Anomaly_tool\storage\..\logs\schema_check.log
