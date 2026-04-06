@@ -113,3 +113,49 @@
 2025-11-10 20:38:05,771 [INFO] [Ingestion] Completed successfully.
 2025-11-10 20:38:05,771 [INFO] [Preprocessing] Cleaning and transforming data...
 2025-11-10 20:38:05,771 [INFO] [Preprocessing] Completed successfully.
+2026-04-06 09:02:03,502 [INFO] === Pipeline Started ===
+2026-04-06 09:02:03,502 [INFO] Mode: live
+2026-04-06 09:02:03,503 [INFO] Database: storage\project_adapt.db
+2026-04-06 09:02:03,503 [INFO] Data Source: live_capture.csv
+2026-04-06 09:02:05,909 [INFO] ✅ Database initialized at 'storage\project_adapt.db'
+2026-04-06 09:02:05,910 [INFO] [Ingestion] Starting data ingestion...
+2026-04-06 09:02:06,016 [INFO] [Ingestion] Detected columns: ['duration', 'protocol_type', 'service', 'flag', 'src_bytes', 'dst_bytes', 'count', 'srv_count', 'serror_rate', 'same_srv_rate', 'src_port', 'dst_port']
+2026-04-06 09:02:06,169 [INFO] [Ingestion] Loaded 448 rows from live_capture.csv
+2026-04-06 09:02:06,170 [INFO] [Ingestion] Completed successfully.
+2026-04-06 09:02:06,170 [INFO] [Preprocessing] Cleaning and transforming data...
+2026-04-06 09:02:06,170 [INFO] [Preprocessing] Completed successfully.
+2026-04-06 09:03:26,124 [INFO] === Pipeline Started ===
+2026-04-06 09:03:26,125 [INFO] Mode: live
+2026-04-06 09:03:26,126 [INFO] Database: storage\project_adapt.db
+2026-04-06 09:03:26,127 [INFO] Data Source: live_capture.csv
+2026-04-06 09:03:26,191 [INFO] ✅ Database initialized at 'storage\project_adapt.db'
+2026-04-06 09:03:26,192 [INFO] [Ingestion] Starting data ingestion...
+2026-04-06 09:03:26,217 [INFO] [Ingestion] Detected columns: ['duration', 'protocol_type', 'service', 'flag', 'src_bytes', 'dst_bytes', 'count', 'srv_count', 'serror_rate', 'same_srv_rate', 'src_port', 'dst_port']
+2026-04-06 09:03:26,250 [INFO] [Ingestion] Loaded 448 rows from live_capture.csv
+2026-04-06 09:03:26,250 [INFO] [Ingestion] Completed successfully.
+2026-04-06 09:03:26,250 [INFO] [Preprocessing] Cleaning and transforming data...
+2026-04-06 09:03:26,250 [INFO] [Preprocessing] Completed successfully.
+2026-04-06 09:22:49,719 [INFO] === Pipeline Started ===
+2026-04-06 09:22:49,720 [INFO] Mode: live
+2026-04-06 09:22:49,720 [INFO] Database: storage\project_adapt.db
+2026-04-06 09:22:49,720 [INFO] Data Source: live_capture.csv
+2026-04-06 09:22:49,744 [INFO] ✅ Database initialized at 'storage\project_adapt.db'
+2026-04-06 09:22:49,745 [INFO] [Ingestion] Starting data ingestion...
+2026-04-06 09:22:49,763 [INFO] [Ingestion] Detected columns: ['duration', 'protocol_type', 'service', 'flag', 'src_bytes', 'dst_bytes', 'count', 'srv_count', 'serror_rate', 'same_srv_rate', 'src_port', 'dst_port']
+2026-04-06 09:22:49,781 [INFO] [Ingestion] Loaded 448 rows from live_capture.csv
+2026-04-06 09:22:49,781 [INFO] [Ingestion] Completed successfully.
+2026-04-06 09:22:49,781 [INFO] [Preprocessing] Cleaning and transforming data...
+2026-04-06 09:22:49,781 [INFO] [Preprocessing] Completed successfully.
+2026-04-06 09:27:45,680 [INFO] === Pipeline Started ===
+2026-04-06 09:27:45,681 [INFO] Mode: live
+2026-04-06 09:27:45,681 [INFO] Database: storage\project_adapt.db
+2026-04-06 09:27:45,682 [INFO] Data Source: live_capture.csv
+2026-04-06 09:27:45,702 [INFO] ✅ Database initialized at 'storage\project_adapt.db'
+2026-04-06 09:27:45,703 [INFO] [Ingestion] Starting data ingestion...
+2026-04-06 09:27:45,725 [INFO] [Ingestion] Detected columns: ['duration', 'protocol_type', 'service', 'flag', 'src_bytes', 'dst_bytes', 'count', 'srv_count', 'serror_rate', 'same_srv_rate', 'src_port', 'dst_port']
+2026-04-06 09:27:45,743 [INFO] [Ingestion] Loaded 448 rows from live_capture.csv
+2026-04-06 09:27:45,743 [INFO] [Ingestion] Completed successfully.
+2026-04-06 09:27:45,744 [INFO] [Preprocessing] Cleaning and transforming data...
+2026-04-06 09:27:45,744 [INFO] [Preprocessing] Completed successfully.
+2026-04-06 09:27:45,813 [INFO] [Detector] Registered 'SimpleDetector' of type 'Threshold'
+2026-04-06 09:27:45,813 [INFO] === Pipeline Ended ===

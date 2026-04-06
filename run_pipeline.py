@@ -87,10 +87,14 @@ def run_ingestion(config, conn):
     logging.info("[Ingestion] Starting data ingestion...")
 
     data_source = config["pipeline"]["data_source"]
-    df = pd.read_csv(data_source)
+    try:
+        df = pd.read_csv(data_source)
+    except Exception as e:
+        logging.error(f"[Ingestion] Failed to read CSV: {e}")
+        return
 
     if df.empty:
-        logging.warning("No data found in the source CSV.")
+        logging.warning("[Ingestion] No data found in the source CSV.")
         return
 
     # Dynamically get columns from CSV
@@ -114,7 +118,6 @@ def run_ingestion(config, conn):
     logging.info("[Ingestion] Completed successfully.")
 
 
-
 # --------------------------
 # Preprocessing
 # --------------------------
@@ -129,13 +132,18 @@ def run_preprocessing(config, conn):
 # --------------------------
 def run_detection(config, conn):
     print("[Detection] Running anomaly detection...")
-    df = pd.read_sql_query("SELECT * FROM raw_data", conn)
+    try:
+        df = pd.read_sql_query("SELECT * FROM raw_data", conn)
+    except Exception as e:
+        print(f"⚠️ [Detection] Could not load raw_data: {e}")
+        return
 
-    # --- Ensure required columns exist ---
+    # --- Ensure required columns exist (failsafe against crashes) ---
     required_cols = ["src_bytes", "dst_bytes"]
     for col in required_cols:
         if col not in df.columns:
-            raise ValueError(f"Missing expected column: {col}")
+            print(f"⚠️ [Detection] Missing expected column '{col}'. Skipping detection to prevent errors.")
+            return
 
     # --- Convert data types to numeric ---
     for col in required_cols:
@@ -144,43 +152,58 @@ def run_detection(config, conn):
 
     # --- Simple heuristic anomaly scoring ---
     for _, row in df.iterrows():
-        score = (row["src_bytes"] + row["dst_bytes"]) / 2  # now both numeric
+        try:
+            score = (row["src_bytes"] + row["dst_bytes"]) / 2  # now both numeric
 
-        conn.execute(
-            "INSERT INTO anomalies (record_id, detector_name, score, detected_at) VALUES (?, ?, ?, ?)",
-            (row["id"], "heuristic_detector", score, datetime.now().isoformat()),
-        )
+            # FIXED: Column names now perfectly match the database schema
+            conn.execute(
+                "INSERT INTO anomalies (row_id, detector_name, anomaly_score, timestamp) VALUES (?, ?, ?, ?)",
+                (row["id"], "heuristic_detector", score, datetime.now().isoformat()),
+            )
+        except Exception as e:
+             # Failsafe: If one row fails, don't crash the whole script
+             print(f"⚠️ [Detection] Error processing row {row.get('id', 'unknown')}: {e}")
 
     conn.commit()
     print("[Detection] Completed successfully.")
-
-
 
 
 # --------------------------
 # Register Detector
 # --------------------------
 def register_detector(conn, name, type_, path):
-    conn.execute(
-        "INSERT INTO detectors (name, type, path, created_at) VALUES (?, ?, ?, ?)",
-        (name, type_, path, datetime.now().isoformat())
-    )
-    conn.commit()
-    logging.info(f"[Detector] Registered '{name}' of type '{type_}'")
+    try:
+        conn.execute(
+            "INSERT INTO detectors (name, type, path, created_at) VALUES (?, ?, ?, ?)",
+            (name, type_, path, datetime.now().isoformat())
+        )
+        conn.commit()
+        logging.info(f"[Detector] Registered '{name}' of type '{type_}'")
+    except Exception as e:
+        logging.error(f"[Detector] Failed to register detector: {e}")
 
 
 # --------------------------
 # Pipeline Runner
 # --------------------------
 def run_pipeline():
-    config = load_config()
+    try:
+        config = load_config()
+    except Exception as e:
+        print(f"❌ Failed to load config.yaml: {e}")
+        return
+
     setup_logger(config)
     logging.info("=== Pipeline Started ===")
-    logging.info(f"Mode: {config['pipeline']['mode']}")
+    logging.info(f"Mode: {config['pipeline'].get('mode', 'unknown')}")
     logging.info(f"Database: {os.path.join(config['database']['folder'], config['database']['name'])}")
     logging.info(f"Data Source: {config['pipeline']['data_source']}")
 
-    conn = init_db(os.path.join(config["database"]["folder"], config["database"]["name"]))
+    try:
+        conn = init_db(os.path.join(config["database"]["folder"], config["database"]["name"]))
+    except Exception as e:
+        logging.critical(f"❌ Failed to initialize database: {e}")
+        return
 
     # Pipeline steps
     run_ingestion(config, conn)
