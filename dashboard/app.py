@@ -4,18 +4,19 @@ import time
 import threading
 from datetime import datetime
 import random
-# --- NEW: Import the email sending function from the alerting module ---
-from alerting.notifier import send_email_alert
 
-# We are using the most basic, reliable setup. NO eventlet.
 app = Flask(__name__)
-# In a real app, render_template should point to index.html
-app.config['SECRET_KEY'] = 'test-key'
-socketio = SocketIO(app)
+app.config['SECRET_KEY'] = 'adapt-secret-key'
+
+# Force standard threading to avoid Windows port and eventlet issues
+socketio = SocketIO(app, async_mode='threading', logger=False, engineio_logger=False)
+
+# Global flag to control the sniffing state
+is_sniffing = False
 
 
 def generate_mock_alert():
-    """Simulates the final output of the Detect -> Classify -> Explain pipeline."""
+    """Simulates an alert with mock data for the UI."""
     classification_options = ["SYN_FLOOD", "PORT_SCAN", "DDOS_ATTACK", "BOTNET_C2"]
     reason_options = [
         "Unusually high 'count' and sharply increased 'serror_rate'.",
@@ -23,67 +24,92 @@ def generate_mock_alert():
         "Sustained, high volume of ICMP packets from multiple sources.",
         "Traffic pattern matching known command-and-control communication profiles."
     ]
-
     return {
         'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         'classification': random.choice(classification_options),
         'reason': random.choice(reason_options),
-        'severity': 'CRITICAL'
+        'severity': 'CRITICAL',
+        'explanation': {
+            'src_bytes': random.uniform(1.5, 3.5),
+            'dst_bytes': random.uniform(-1.5, -0.1),
+            'count': random.uniform(1.0, 2.5)
+        }
     }
 
 
 def background_sniffer_and_alerter():
-    """
-    Simulates the background real-time monitoring thread.
-
-    In the final system, this function loads the ML models, reads from Scapy,
-    and runs the 3-stage pipeline (Detect -> Classify -> Explain).
-    """
-    print("[SNIFFER] Monitoring thread started. Simulating traffic analysis...")
+    """Runs continuously but only emits data when is_sniffing is True."""
+    global is_sniffing
+    print("[SNIFFER] Background thread active.")
     count = 0
+
     while True:
-        count += 1
+        if is_sniffing:
+            count += 1
 
-        # 1. Simulate Detection (happens every 1 second)
-        message = f"Traffic Window #{count}: Normal traffic window processed."
-        socketio.emit('heartbeat', {'message': message})
+            # 1. Heartbeat Log
+            message = f"Traffic Window #{count}: Normal traffic window processed."
+            socketio.emit('heartbeat', {'message': message})
 
-        # 2. Simulate Anomaly Alert (Randomly happens every 10 seconds)
-        if count % 10 == 0:
-            alert_data = generate_mock_alert()
-            alert_message = f"🚨 ANOMALY: {alert_data['classification']} | REASON: {alert_data['reason']}"
+            # 2. Protocol Chart Data
+            chart_data = {
+                'tcp': random.randint(40, 80),
+                'udp': random.randint(10, 30),
+                'icmp': random.randint(0, 10),
+                'other': random.randint(0, 5)
+            }
+            socketio.emit('protocol_update', chart_data)
 
-            # --- STAGE 1: Push Alert to Web UI (WebSocket) ---
-            socketio.emit('anomaly_detected', alert_data)
-            print(f"WEB ALERT SENT: {alert_message}")
+            # 3. Anomaly Alert (Every 5 iterations)
+            if count % 5 == 0:
+                alert_data = generate_mock_alert()
+                socketio.emit('anomaly_detected', alert_data)
+                print(f"WEB ALERT SENT: {alert_data['classification']}")
 
-            # --- STAGE 2: Send External Alert (Email) ---
-            # Using the default recipient defined in notifier.py
-            send_email_alert(alert_data)
-
-        socketio.sleep(1)  # Use socketio.sleep instead of time.sleep in Flask-SocketIO background threads
+        # Standard time.sleep is required for threading mode
+        time.sleep(1)
 
 
 @app.route('/')
 def index():
-    # We will serve a different, simpler HTML file for this test.
-    # In the final project, this file is dashboard/templates/index.html
-    return render_template('test_index.html')
+    return render_template('index.html')
 
 
 @socketio.on('connect')
 def handle_connect():
-    """When a browser connects, start the monitoring thread."""
-    print('[SERVER] Client connected. Starting background monitoring.')
-    # Start the monitoring thread only if it's not already running
-    if threading.active_count() <= 1:  # Only the main thread is active
-        # Renaming to match the project's function: background_sniffer_and_alerter
-        threading.Thread(target=background_sniffer_and_alerter, daemon=True).start()
+    print('[SERVER] Client connected.')
+
+
+@socketio.on('start_sniffing')
+def handle_start():
+    global is_sniffing
+    is_sniffing = True
+    print('[SERVER] Live monitoring STARTED.')
+    socketio.emit('status_update', {'message': 'Live monitoring started...', 'level': 'success'})
+
+
+@socketio.on('stop_sniffing')
+def handle_stop():
+    global is_sniffing
+    is_sniffing = False
+    print('[SERVER] Live monitoring STOPPED.')
+    socketio.emit('status_update', {'message': 'Live monitoring paused.', 'level': 'warn'})
 
 
 if __name__ == '__main__':
-    print("--- 🚀 Launching SOC Server (Email Alerting Enabled) ---")
-    print("--- Go to http://127.0.0.1:5000 ---")
-    # Setting debug=False is crucial for multi-threaded applications like this,
-    # as Flask's reloader can spawn multiple threads, breaking the background task.
-    socketio.run(app, host='127.0.0.1', port=5000, debug=False)
+    # Initialize background thread
+    threading.Thread(target=background_sniffer_and_alerter, daemon=True).start()
+
+    print("--- 🚀 Launching A-DAPT SOC Server ---")
+    print("--- Go to http://127.0.0.1:5055 ---")
+
+    # allow_unsafe_werkzeug=True fixes the RuntimeError
+    socketio.run(
+        app,
+        host='127.0.0.1',
+        port=5055,
+        debug=True,
+        use_reloader=False,
+        log_output=False,
+        allow_unsafe_werkzeug=True
+    )

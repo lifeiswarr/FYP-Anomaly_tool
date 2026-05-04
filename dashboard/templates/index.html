@@ -4,27 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unified Anomaly Detection SOC</title>
-    <!--
-    Chosen Palette: "Cyber Dark" (A custom high-contrast palette adapted from Energetic & Playful)
-    Application Structure Plan: The SPA is architected as a professional, single-view Security Operations Center (SOC) dashboard. The information architecture is task-oriented, separating controls from visualizations for a clear, intuitive user experience.
-    1.  Control & Status Column (Left): This column acts as the command center. It provides dedicated "cards" for primary actions (Live Monitoring), secondary tasks (Model Training), and system feedback (System Log). This separation allows an analyst to perform any action without leaving the main view or losing sight of incoming alerts. The flow is logical: check model status, train if needed, then start monitoring.
-    2.  Visualization & Alert Column (Right): This is the primary situational awareness panel. It contains the most critical, real-time outputs: a live-updating chart for traffic composition and, most importantly, the Anomaly Alert Feed. The alert feed is given the most screen real estate, as it is the ultimate output of the entire system.
-    This two-column, task-vs-data structure was chosen for its clarity and professional feel. It allows an analyst to control the system and see live feedback simultaneously without changing views, which is optimal for a monitoring tool.
-    Visualization & Content Choices:
-    - Live Monitoring Control (Buttons): Goal: User Interaction. Method: Styled HTML buttons with icons. Interaction: Click to send 'start_sniffing' or 'stop_sniffing' events to the backend. Justification: Provides explicit, unambiguous control over the live data source.
-    - Model Training (Dropdowns & Buttons): Goal: User Interaction. Method: HTML forms with icons. Interaction: Select a data file, click to trigger a 'start_training' event. Justification: Integrates the training workflow directly into the primary UI, removing the need for a separate terminal application.
-    - System Log (Dynamic List): Goal: Inform. Method: Structured HTML/CSS. Interaction: New status updates from the backend are prepended in real-time. Justification: Provides essential, non-critical feedback on background tasks without cluttering the main alert feed.
-    - Protocol Distribution (Donut Chart): Goal: Compare (Composition). Method: Chart.js Donut Chart. Interaction: Live updates pushed from the backend via WebSockets. Justification: Gives an immediate, easy-to-understand view of the current traffic mix.
-    - Anomaly Alert Feed (Dynamic List): Goal: Inform/Organize. Method: Structured HTML/CSS. Interaction: New, explained anomaly alerts are prepended in real-time with visual cues. Justification: This is the core output of the system, presenting the timestamp, classification, and SHAP-based explanation for immediate, actionable intelligence.
-    CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
-    -->
     <style>
-        /* Embedded Tailwind CSS v3.4.1 - This is a large block of CSS to make the file self-contained */
-        /* For brevity in this display, the full Tailwind CSS code is represented by this comment.
-           In the actual generated file, the complete minified CSS would be here. */
         /*! tailwindcss v3.4.1 | MIT License | https://tailwindcss.com */
         *,::before,::after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::before,::after{--tw-content:''}html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}
-        /* ... A very large amount of Tailwind CSS would be pasted here ... */
         :root { --bg: #1e1e2f; --card: #27293d; --text: #dcd7ba; --primary: #7aa2f7; --error: #f7768e; --success: #9ece6a; --warn: #e0af68; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); }
         .card { background-color: var(--card); }
@@ -47,26 +29,9 @@
         .shap-pos { color: var(--success); }
         .shap-neg { color: var(--error); }
     </style>
-    <script>
-        /* Embedded Chart.js v4.4.1 - Full minified library code */
-        /*!
-         * Chart.js v4.4.1
-         * https://www.chartjs.org
-         * (c) 2023 Chart.js Contributors
-         * Released under the MIT License
-         */
-        // ... Full minified Chart.js library code would be pasted here ...
-    </script>
-    <script>
-        /* Embedded Socket.IO v4.7.5 - Full minified library code */
-        /**
-         * Socket.IO client
-         *
-         * @license MIT
-         * @version 4.7.5
-         */
-        // ... Full minified Socket.IO client library code would be pasted here ...
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="p-4 lg:p-6">
 
@@ -119,7 +84,10 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // --- THIS IS THE MAGIC LINE ---
+        // Empty parentheses mean it automatically matches the server's port
         const socket = io();
+
         const statusLog = document.getElementById('status-log');
         const anomalyLog = document.getElementById('anomaly-log');
         const fileSelectDetector = document.getElementById('file-select-detector');
@@ -163,6 +131,7 @@
         });
 
         socket.on('status_update', (data) => logStatus(data.message, data.level));
+        socket.on('heartbeat', (data) => logStatus(data.message, 'info'));
 
         socket.on('file_list', (data) => {
             [fileSelectDetector, fileSelectClassifier].forEach(select => {
@@ -183,7 +152,7 @@
                 anomalyLog.innerHTML = '';
             }
 
-            const explanation = data.explanation;
+            const explanation = data.explanation || {};
             let explanationHTML = '<ul class="mt-2 pl-4 font-mono text-xs">';
             const sortedFeatures = Object.entries(explanation).sort(([,a],[,b]) => Math.abs(b) - Math.abs(a));
 
@@ -199,7 +168,7 @@
             entry.innerHTML = `
                 <div class="log-header font-bold text-lg">[${data.timestamp}] ALERT: ${data.classification}</div>
                 <div class="log-reason text-sm mt-1">Key Contributing Features:</div>
-                ${explanationHTML}
+                <div class="text-xs text-gray-400 mt-1">${data.reason}</div>
             `;
             anomalyLog.prepend(entry);
             setTimeout(() => { entry.classList.remove('opacity-0', '-translate-x-4'); }, 50);
@@ -208,28 +177,6 @@
         startBtn.addEventListener('click', () => socket.emit('start_sniffing'));
         stopBtn.addEventListener('click', () => socket.emit('stop_sniffing'));
 
-        trainDetectorBtn.addEventListener('click', () => {
-            const filename = fileSelectDetector.value;
-            if (!filename) { logStatus('Please select a file for detector training.', 'error'); return; }
-            trainDetectorBtn.disabled = true;
-            trainDetectorBtn.textContent = 'Training...';
-            socket.emit('start_training', { filename: filename, model_type: 'detector' });
-        });
-
-        trainClassifierBtn.addEventListener('click', () => {
-            const filename = fileSelectClassifier.value;
-            if (!filename) { logStatus('Please select a file for classifier training.', 'error'); return; }
-            trainClassifierBtn.disabled = true;
-            trainClassifierBtn.textContent = 'Training...';
-            socket.emit('start_training', { filename: filename, model_type: 'classifier' });
-        });
-
-        socket.on('training_complete', () => {
-            trainDetectorBtn.disabled = false;
-            trainDetectorBtn.textContent = 'Train Detector';
-            trainClassifierBtn.disabled = false;
-            trainClassifierBtn.textContent = 'Train Classifier';
-        });
     });
 </script>
 </body>
